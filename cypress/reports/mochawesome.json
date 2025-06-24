@@ -1,0 +1,105 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 1,
+    "pending": 0,
+    "failures": 0,
+    "start": "2025-06-24T21:33:40.193Z",
+    "end": "2025-06-24T21:34:30.194Z",
+    "duration": 50001,
+    "testsRegistered": 1,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "9d399458-45a2-4743-a81b-a86f845fc9ce",
+      "title": "",
+      "fullFile": "cypress\\e2e\\tests\\A-registrationFlow.cy.js",
+      "file": "cypress\\e2e\\tests\\A-registrationFlow.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "27142057-171a-4edc-8c00-b2671ba8f6bc",
+          "title": "Registration Flow",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "User should be able to register and login successfully",
+              "fullTitle": "Registration Flow User should be able to register and login successfully",
+              "timedOut": null,
+              "duration": 49913,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit('/');\nconst homepage = new _HomePage.default();\nconst registerpage = new _RegisterPage.default();\nconst loginpage = new _LoginPage.default();\nhomepage.createAnAccountHeader().click();\nregisterpage.firstnameField().type(userData.firstName);\nregisterpage.lastnameField().type(userData.lastName);\nregisterpage.emailField().type(userData.email);\nregisterpage.passwordField().type(userData.password);\nregisterpage.confirmPasswordField().type(userData.password);\nregisterpage.createAnAccountButton().click();\nregisterpage.errorMessage().should('not.exist');\n// Validate registration success\nregisterpage.welcomeMessage().invoke('text').then(text => {\n  expect(text).contain(userData.welcomeText);\n});\n//Logout\nhomepage.customerMenuButton().click();\nhomepage.signoutButton().click();\ncy.wait(7000);\nhomepage.homepageText().invoke('text').then(text => {\n  expect(text).contain(\"Home Page\");\n});\n//Login Again\nhomepage.signInHeader().click();\nloginpage.login(userData.email, userData.password);\ncy.wait(2000);\nhomepage.homepageText().invoke('text').then(text => {\n  expect(text).contain(\"Home Page\");\n});",
+              "err": {},
+              "uuid": "6b7a90e5-bc4f-4f61-878f-b737dc108d7a",
+              "parentUUID": "27142057-171a-4edc-8c00-b2671ba8f6bc",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "6b7a90e5-bc4f-4f61-878f-b737dc108d7a"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 49913,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

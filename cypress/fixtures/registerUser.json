@@ -1,7 +1,7 @@
 {
   "firstName": "Automation",
-  "lastName": "Test2",
-  "email": "automationtest5@mail.com",
-  "password": "automationtest2@1234",
+  "lastName": "Test",
+  "email": "test.user.1750800820217@example.com",
+  "password": "TestUser@1234",
   "welcomeText": "Thank you for registering with Main Website Store."
 }

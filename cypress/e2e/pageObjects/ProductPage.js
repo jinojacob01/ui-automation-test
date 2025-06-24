@@ -16,27 +16,60 @@ class ProductPage {
         return cy.get(".product-info-main .towishlist")
     }
 
+    productNameLink() {
+        return ".product-item-link"
+    }
+
+    productSize() {
+        return ".swatch-option.text"
+    }
+
+    productColor() {
+        return cy.get(".swatch-option.color")
+    }
+
+    addToCartButton() {
+        return cy.get("#product_addtocart_form .primary")
+    }
+
+    alertMessage() {
+        return cy.get("div[role='alert']")
+    }
+
     addProductToCart(product) {
-        cy.contains('.product-item-link', product.name).click({ force: true })
-        cy.contains('.swatch-option.text', product.size).scrollIntoView().click({ force: true })
-        cy.get('.swatch-option.color').eq(product.colorIndex).scrollIntoView().click({ force: true })
-        cy.get('#product_addtocart_form .primary').click({ force: true })
-        cy.get("div[role='alert']").invoke('text').then((text) => {
+        cy.contains(this.productNameLink(), product.name).click({ force: true })
+        cy.contains(this.productSize(), product.size).scrollIntoView().click({ force: true })
+        this.productColor().eq(product.colorIndex).scrollIntoView().click({ force: true })
+        this.addToCartButton().click({ force: true })
+        this.alertMessage().invoke('text').then((text) => {
             expect(text).to.contain(product.name)
         })
         cy.wait(2000)
         cy.go('back')
     }
 
+
+    productList() {
+        return cy.get("tr.item-info")
+    }
+
+    productSubTotal() {
+        return "td.subtotal"
+    }
+
+    productPrice() {
+        return cy.get("tr td.amount .price").eq(0)
+    }
+
     verifyCartTotal() {
         cy.wait(3000)
         let expectedTotal = 0;
-        cy.get('tr.item-info').should('have.length.at.least', 1)
-        cy.get('tr.item-info').each(($el) => {
-            const price = parseFloat($el.find('td.subtotal').text().replace('$', ''))
+        this.productList().should('have.length.at.least', 1)
+        this.productList().each(($el) => {
+            const price = parseFloat($el.find(this.productSubTotal()).text().replace('$', ''))
             expectedTotal += price
         }).then(() => {
-            cy.get('tr td.amount .price').eq(0).invoke('text').then(actualTotalText => {
+            this.productPrice().invoke('text').then(actualTotalText => {
                 const actualTotal = parseFloat(actualTotalText.replace('$', ''))
                 expect(actualTotal).to.eq(expectedTotal)
             })
@@ -44,24 +77,15 @@ class ProductPage {
     }
 
     addProductToWishlist(wproduct) {
-        cy.contains('.product-item-link', wproduct.name).click({ force: true })
-        cy.contains('.swatch-option.text', wproduct.size).scrollIntoView().click({ force: true })
-        cy.get('.swatch-option.color').eq(wproduct.colorIndex).scrollIntoView().click({ force: true })
+        cy.contains(this.productNameLink(), wproduct.name).click({ force: true })
+        cy.contains(this.productSize(), wproduct.size).scrollIntoView().click({ force: true })
+        this.productColor().eq(wproduct.colorIndex).scrollIntoView().click({ force: true })
         this.addToWishList().click({ force: true })
         cy.wait(2000)
-        cy.get("div[role='alert']").invoke('text').then((text) => {
+        this.alertMessage().invoke('text').then((text) => {
             expect(text).to.contain(wproduct.name)
         })
         cy.go('back').go('back')
-    }
-
-    deleteAllItems() {
-        cy.get('.action-delete').then(($els) => {
-            if ($els.length > 0) {
-                cy.wrap($els[0]).click({ force: true })
-                cy.wait(2000)
-            }
-        })
     }
 
 }

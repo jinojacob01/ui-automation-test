@@ -33,6 +33,18 @@ class HomePage {
         return cy.get("button[data-action='customer-menu-toggle']").eq(0)
     }
 
+    searchBox() {
+        return cy.get("#search")
+    }
+
+    searchDropdownValues() {
+       return "ul[role='listbox'] li"
+    }
+
+    productLink() {
+        return ".product-item-link"
+    }
+
 
 }
 

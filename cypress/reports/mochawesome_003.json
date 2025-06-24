@@ -1,0 +1,105 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 1,
+    "pending": 0,
+    "failures": 0,
+    "start": "2025-06-24T21:37:19.477Z",
+    "end": "2025-06-24T21:38:06.003Z",
+    "duration": 46526,
+    "testsRegistered": 1,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "51a1b4e1-86ad-45e6-a4b9-b08bc68476b5",
+      "title": "",
+      "fullFile": "cypress\\e2e\\tests\\D-searchResultsFlow.cy.js",
+      "file": "cypress\\e2e\\tests\\D-searchResultsFlow.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "9c6e4195-6a3b-45aa-921f-13bbf320045e",
+          "title": "Validate Search",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Verify if product search is as expected",
+              "fullTitle": "Validate Search Verify if product search is as expected",
+              "timedOut": null,
+              "duration": 46419,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit('/');\nconst homepage = new _HomePage.default();\nconst loginpage = new _LoginPage.default();\nhomepage.signInHeader().click();\nloginpage.login(userData.email, userData.password);\ncy.wait(2000);\nhomepage.homepageText().invoke('text').then(text => {\n  expect(text).contain(\"Home Page\");\n});\ncy.fixture('search').then(searchtexts => {\n  searchtexts.forEach(searchtext => {\n    homepage.searchBox().clear().type(searchtext.text);\n    cy.contains(homepage.searchDropdownValues(), searchtext.productname).click();\n    cy.contains(homepage.productLink(), searchtext.productname).click({\n      force: true\n    });\n    homepage.homepageText().invoke('text').then(text => {\n      expect(text.trim()).to.equal(searchtext.productname);\n    });\n    cy.go('back');\n  });\n});",
+              "err": {},
+              "uuid": "de2db2cd-b705-4754-82d2-02398ac627fb",
+              "parentUUID": "9c6e4195-6a3b-45aa-921f-13bbf320045e",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "de2db2cd-b705-4754-82d2-02398ac627fb"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 46419,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

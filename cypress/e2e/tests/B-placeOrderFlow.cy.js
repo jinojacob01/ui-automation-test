@@ -36,13 +36,6 @@ describe('Place Order Flow', () => {
         productpage.cartButton().click({ force: true })
         productpage.viewCartButton().click({ force: true })
         productpage.verifyCartTotal()
-        // productpage.deleteAllItems()
-
-        //Delete all prroducts
-        // cy.get(".action-delete").should('exist').each(($el) => {
-        //     cy.wrap($el).click({ force: true })
-        //     cy.wait(2000)
-        // })
     })
 
 })

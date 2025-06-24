@@ -1,10 +1,4 @@
-import ProductPage from "./ProductPage"
-import CartPage from "./CartPage"
-
 class WishlistPage {
-
-    productpage = new ProductPage()
-    cartpage = new CartPage()
 
     addAllToCartButton() {
         return cy.get("button[data-role='all-tocart']")

@@ -1,27 +1,20 @@
 import HomePage from '../pageObjects/HomePage';
 import LoginPage from '../pageObjects/LoginPage';
-import ProductPage from '../pageObjects/ProductPage';
 
 describe('Validate Search', () => {
 
     let userData
-    let searchtext
 
     before(() => {
         cy.fixture('registerUser').then((data) => {
             userData = data
         })
-
-        cy.fixture('search').then((data) => {
-            searchtext = data
-        })
     })
 
-    it('Verify if product search is working fine', () => {
+    it('Verify if product search is as expected', () => {
         cy.visit('/');
         const homepage = new HomePage()
         const loginpage = new LoginPage()
-        const productpage = new ProductPage()
 
         homepage.signInHeader().click()
         loginpage.login(userData.email, userData.password)
@@ -29,7 +22,16 @@ describe('Validate Search', () => {
         homepage.homepageText().invoke('text').then((text) => {
             expect(text).contain("Home Page");
         })
-
+        cy.fixture('search').then((searchtexts) => {
+            searchtexts.forEach((searchtext) => {
+                homepage.searchBox().clear().type(searchtext.text)
+                cy.contains(homepage.searchDropdownValues(), searchtext.productname).click()
+                cy.contains(homepage.productLink(), searchtext.productname).click({ force: true })
+                homepage.homepageText().invoke('text').then((text) => {
+                    expect(text.trim()).to.equal(searchtext.productname)
+                })
+                cy.go('back')
+            })
+        })
     })
-
 })

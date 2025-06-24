@@ -1,11 +1,14 @@
 [
   {
-    "name": "Cassius Sparring Tank"
+    "text": "Cassius",
+    "productname": "Cassius Sparring Tank"
   },
   {
-    "name": "Atlas Fitness Tank"
+    "text": "Antonia Racer",
+    "productname": "Antonia Racer Tank"
   },
   {
-    "name": "Tiberius Gym Tank"
+    "text": "Tiberius",
+    "productname": "Tiberius Gym Tank"
   }
 ]

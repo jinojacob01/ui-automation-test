@@ -9,9 +9,9 @@ describe('Registration Flow', () => {
     before(() => {
         
         cy.generateRandomEmail().then((email) => {
-            cy.readFile('cypress/fixtures/userData.json').then((data) => {
+            cy.readFile('cypress/fixtures/registerUser.json').then((data) => {
                 data.email = email;
-                cy.writeFile('cypress/fixtures/userData.json', data)
+                cy.writeFile('cypress/fixtures/registerUser.json', data)
             })
         })
 

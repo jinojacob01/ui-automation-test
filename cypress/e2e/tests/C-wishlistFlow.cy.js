@@ -14,6 +14,7 @@ describe('Wishlist Flow', () => {
 
     let userData
     let wproducts
+    let address
 
     before(() => {
         cy.fixture('registerUser').then((data) => {
@@ -22,6 +23,10 @@ describe('Wishlist Flow', () => {
 
         cy.fixture('wishlistproducts').then((data) => {
             wproducts = data
+        })
+
+        cy.fixture('address').then((data) => {
+            address = data
         })
     })
 
@@ -50,14 +55,16 @@ describe('Wishlist Flow', () => {
         cy.visit("/checkout/#shipping")
         cartpage.loadingIcon().should('not.exist', { timeout: 10000 })
         cy.wait(10000)
-        cartpage.streetAddressField().type("Test Street", {force:true},{ timeout: 10000 } )
-        cartpage.cityField().type("Test City", {force:true},{ timeout: 10000 })
-        cartpage.stateField().select('1', {force:true})
-        cartpage.zipcodeField().type("12345", {force:true},{ timeout: 10000 })
-        cartpage.phoneNumberField().type("0123456789", {force:true},{ timeout: 10000 })
+        cartpage.streetAddressField().type(address.street, { force: true }, { timeout: 10000 })
+        cartpage.cityField().type(address.city, { force: true }, { timeout: 10000 })
+        cartpage.stateField().select(address.stateId, { force: true })
+        cartpage.zipcodeField().type(address.zipcode, { force: true }, { timeout: 10000 })
+        cartpage.phoneNumberField().type(address.phone, { force: true }, { timeout: 10000 })
         cartpage.shippingMethods().eq(0).click()
         cartpage.nextButton().click()
-        cartpage.placeOrderButton().click()
+        cartpage.loadingIcon().should('not.exist', { timeout: 10000 })
+        cartpage.placeOrderButton().click({ force: true })
+        cy.wait(10000)
         homepage.homepageText().invoke('text').then((text) => {
             expect(text).contain("Thank you for your purchase!");
         })
