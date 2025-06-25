@@ -1,0 +1,600 @@
+{
+	"info": {
+		"_postman_id": "fa7d440f-5744-4290-97f2-99a6c55a53cc",
+		"name": "Petstore API Tests",
+		"description": "API tests for Petstore POST and GET endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11357476"
+	},
+	"item": [
+		{
+			"name": "POST Tests - Create New Pet",
+			"item": [
+				{
+					"name": "Test 1 - Create a Simple Pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check if the request was successful",
+									"pm.test(\"Status code is 200 (Success)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Check if we got a response",
+									"pm.test(\"Response is not empty\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Check if response contains pet data",
+									"pm.test(\"Response contains pet information\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('name');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 12345,\n  \"name\": \"Buddy\",\n  \"photoUrls\": [\n    \"https://example.com/buddy-photo.jpg\"\n  ],\n  \"status\": \"available\"\n}"
+						},
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet"
+							]
+						},
+						"description": "This test creates a simple pet with basic information. It checks if the pet was created successfully."
+					},
+					"response": []
+				},
+				{
+					"name": "Test 2 - Create Pet with All Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check if pet was created successfully",
+									"pm.test(\"Pet created successfully\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Check if pet name matches what we sent",
+									"pm.test(\"Pet name is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.name).to.eql(\"Max\");",
+									"});",
+									"",
+									"// Check if pet status is correct",
+									"pm.test(\"Pet status is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"available\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 67890,\n  \"category\": {\n    \"id\": 1,\n    \"name\": \"Dogs\"\n  },\n  \"name\": \"Max\",\n  \"photoUrls\": [\n    \"https://example.com/max-photo1.jpg\",\n    \"https://example.com/max-photo2.jpg\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 1,\n      \"name\": \"friendly\"\n    }\n  ],\n  \"status\": \"available\"\n}"
+						},
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet"
+							]
+						},
+						"description": "This test creates a pet with complete details including category and tags."
+					},
+					"response": []
+				},
+				{
+					"name": "Test 3 - Create Pet with Different Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check if pet was created",
+									"pm.test(\"Pet created successfully\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Check if status is 'pending'",
+									"pm.test(\"Pet status is pending\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"pending\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 11111,\n  \"name\": \"Luna\",\n  \"photoUrls\": [\n    \"https://example.com/luna-photo.jpg\"\n  ],\n  \"status\": \"pending\"\n}"
+						},
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet"
+							]
+						},
+						"description": "This test creates a pet with 'pending' status to test different status values."
+					},
+					"response": []
+				},
+				{
+					"name": "Test 4 - Create Pet with Invalid Id (Should Fail)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// This should fail because the petId is invalid",
+									"pm.test(\"Request fails with bad JSON\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": abcd,\n  \"category\": {\n    \"id\": 1,\n    \"name\": \"Dogs\"\n  },\n  \"name\": \"Max\",\n  \"photoUrls\": [\n    \"https://example.com/max-photo1.jpg\",\n    \"https://example.com/max-photo2.jpg\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 1,\n      \"name\": \"friendly\"\n    }\n  ],\n  \"status\": \"available\"\n}"
+						},
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet"
+							]
+						},
+						"description": "This test creates a pet with invalid Id"
+					},
+					"response": []
+				},
+				{
+					"name": "Test 5 - Create Pet with Bad Data (Should Fail)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// This should fail because the JSON is broken",
+									"pm.test(\"Request fails with bad JSON\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 88888,\n  \"name\": \"BadPet\",\n  \"photoUrls\": [\n    \"https://example.com/photo.jpg\"\n  ],\n  \"status\": \"available\"\n  // Missing closing brace - this will cause an error"
+						},
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet"
+							]
+						},
+						"description": "This test sends broken JSON data. It should fail with a 400 error."
+					},
+					"response": []
+				}
+			],
+			"description": "These tests create new pets in the store. Some should succeed, some should fail on purpose to test error handling."
+		},
+		{
+			"name": "GET Tests - Find Existing Pet",
+			"item": [
+				{
+					"name": "Test 6 - Get Pet We Just Created",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check if we found the pet",
+									"pm.test(\"Pet found successfully\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Check if response has pet data",
+									"pm.test(\"Response contains pet data\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('name');",
+									"    pm.expect(jsonData).to.have.property('status');",
+									"});",
+									"",
+									"// Check if the pet ID matches what we requested",
+									"pm.test(\"Pet ID matches request\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var segments = pm.request.url.path;",
+									"    var petId = segments[segments.length - 1];",
+									"    pm.expect(jsonData.id.toString()).to.eql(petId.toString());",
+									"});",
+									"",
+									"// Check if pet name is 'Buddy' (from our POST test)",
+									"pm.test(\"Pet name is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.name).to.eql(\"Buddy\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet/12345",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet",
+								"12345"
+							]
+						},
+						"description": "This test gets the pet we created in the first POST test. It should return the pet details."
+					},
+					"response": []
+				},
+				{
+					"name": "Test 7 - Get Pet with All Details",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check if pet was found",
+									"pm.test(\"Pet found successfully\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Check pet name",
+									"pm.test(\"Pet name is Max\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.name).to.eql(\"Max\");",
+									"});",
+									"",
+									"// Check if pet has category",
+									"pm.test(\"Pet has category information\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('category');",
+									"    if (jsonData.category) {",
+									"        pm.expect(jsonData.category.name).to.eql(\"Dogs\");",
+									"    }",
+									"});",
+									"",
+									"// Check if pet has photos",
+									"pm.test(\"Pet has photo URLs\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.photoUrls).to.be.an('array');",
+									"    pm.expect(jsonData.photoUrls.length).to.be.above(0);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet/67890",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet",
+								"67890"
+							]
+						},
+						"description": "This test gets the detailed pet we created. It checks for category and photo information."
+					},
+					"response": []
+				},
+				{
+					"name": "Test 8 - Get Pet That Exists (ID = 1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Pet with ID 1 might exist or not",
+									"pm.test(\"Response is either success or not found\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 404]);",
+									"});",
+									"",
+									"// If pet exists, check its data",
+									"if (pm.response.code === 200) {",
+									"    pm.test(\"Pet data is valid\", function () {",
+									"        var jsonData = pm.response.json();",
+									"        pm.expect(jsonData).to.have.property('id');",
+									"        pm.expect(jsonData).to.have.property('name');",
+									"        pm.expect(jsonData.id).to.eql(1);",
+									"    });",
+									"}",
+									"",
+									"// If pet doesn't exist, that's also OK",
+									"if (pm.response.code === 404) {",
+									"    pm.test(\"Pet not found message received\", function () {",
+									"        pm.expect(pm.response.text()).to.not.be.empty;",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet/1",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet",
+								"1"
+							]
+						},
+						"description": "This test tries to get a pet with ID 1. It might exist or not - both responses are valid."
+					},
+					"response": []
+				},
+				{
+					"name": "Test 9 - Try to Get Pet That Doesn't Exist (Should Fail)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// This should return 404 because the pet doesn't exist",
+									"pm.test(\"Pet not found (404 error)\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"// Check that we get an error message",
+									"pm.test(\"Error message is returned\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});",
+									"",
+									"// Response should be quick even for errors",
+									"pm.test(\"Response time is reasonable\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet/99999999999999999999",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet",
+								"99999999999999999999"
+							]
+						},
+						"description": "This test tries to get a pet with a very high ID that probably doesn't exist. Should return 404."
+					},
+					"response": []
+				},
+				{
+					"name": "Test 10 - Try to Get Pet with Invalid ID (Should Fail)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// This should fail because 'abc' is not a valid pet ID",
+									"pm.test(\"Invalid ID returns error\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([400, 404]);",
+									"});",
+									"",
+									"// Should get an error message",
+									"pm.test(\"Error response received\", function () {",
+									"    pm.expect(pm.response.text()).to.not.be.empty;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet/abcd",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet",
+								"abcd"
+							]
+						},
+						"description": "This test tries to get a pet using 'abc' as the ID. This should fail because IDs should be numbers."
+					},
+					"response": []
+				}
+			],
+			"description": "These tests try to find pets by their ID. Some should succeed, some should fail when the pet doesn't exist."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// This runs before every request",
+					"console.log('🚀 Running test: ' + pm.info.requestName);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// This runs after every request",
+					"",
+					"// Check that we got some kind of response",
+					"pm.test(\"Response received\", function () {",
+					"    pm.expect(pm.response.text()).to.not.be.undefined;",
+					"});",
+					"",
+					"// Check that response time is reasonable",
+					"pm.test(\"Response time is reasonable (under 10 seconds)\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(10000);",
+					"});"
+				]
+			}
+		}
+	]
+}
